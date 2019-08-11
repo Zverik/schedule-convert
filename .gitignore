@@ -1,0 +1,6 @@
+*.xml
+*.json
+*.ini
+*.xcal
+data/
+__pycache__/
