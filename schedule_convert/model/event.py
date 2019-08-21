@@ -15,7 +15,10 @@ class Event:
         if guid is None or isinstance(guid, uuid.UUID):
             self.guid = guid
         else:
-            self.guid = uuid.UUID(guid)
+            try:
+                self.guid = uuid.UUID(guid)
+            except ValueError:
+                self.guid = None
         self.speakers = []
         self.license = None
         self.can_record = True
