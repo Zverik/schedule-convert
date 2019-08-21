@@ -106,7 +106,7 @@ class FrabXmlImporter:
                     event.abstract = getttext(xevent, 'abstract')
                     event.description = getttext(xevent, 'description')
                     for xperson in xevent.find('persons'):
-                        person_id = int(xperson.get('id'))
+                        person_id = xperson.get('id')
                         if person_id not in speakers:
                             speakers[person_id] = Speaker(xperson.text, id=person_id)
                         event.speakers.append(speakers[person_id])
