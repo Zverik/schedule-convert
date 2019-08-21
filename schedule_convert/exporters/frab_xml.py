@@ -51,7 +51,7 @@ class FrabXmlExporter:
                         xroom = etree.SubElement(xday, 'room')
                         xroom.set('name', room.name)
                     xtalk = etree.SubElement(xroom, 'event')
-                    xtalk.set('guid', talk.guid)
+                    xtalk.set('guid', str(talk.guid))
                     xtalk.set('id', str(talk.id))
                     etree.SubElement(xtalk, 'date').text = to_timestamp(talk.start, conf)
                     etree.SubElement(xtalk, 'start').text = talk.start.strftime('%H:%M')

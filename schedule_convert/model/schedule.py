@@ -1,3 +1,9 @@
+import uuid
+
+
+UUID_NAMESPACE = uuid.UUID('6ba7b838-9dad-11d1-80b4-00c04fd430c8')
+
+
 class Conference:
     def __init__(self, title):
         self.title = title
@@ -11,6 +17,21 @@ class Conference:
         self.timezone = None
         self.needs_data = title is None
 
+    def make_guid(self, event):
+        if self.slug is None or event.slug is None:
+            return None
+        if event.room is not None:
+            room = event.room.name
+        else:
+            room = ''
+        return uuid.uuid5(UUID_NAMESPACE, self.slug + event.slug +
+                          room + event.start.strftime('%Y-%m-%d'))
+
+    def slugify(self, s):
+        if s is None:
+            return None
+        return s.lower().strip().replace(' ', '_')
+
     def filter_events(self, day=None, room=None):
         for event in sorted(self.events):
             if not event.start or not event.room or not event.active:
@@ -22,11 +43,22 @@ class Conference:
             yield event
 
     def prepare(self):
+        if self.slug is None and self.title is not None:
+            self.slug = self.slugify(self.title)
+        guids = set()
         for event in self.events:
             self.days.add(event.start.date())
             if event.room:
                 self.rooms.add(event.room)
             self.speakers.update(event.speakers)
+            if event.slug is None:
+                event.slug = self.slugify(event.title)
+            if event.guid is None:
+                event.guid = self.make_guid(event)
+            if event.guid is not None:
+                if event.guid in guids:
+                    raise Exception('Duplicated guid {}'.format(event.guid))
+                guids.add(event.guid)
 
     def merge(self, other):
         if other.timeslot < self.timeslot:

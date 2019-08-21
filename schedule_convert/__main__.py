@@ -27,6 +27,7 @@ for i in options.input:
             schedule = conf
     else:
         schedule.merge(conf)
+    schedule.prepare()
 
 if schedule is None:
     print('No schedule to export')

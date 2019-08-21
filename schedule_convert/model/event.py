@@ -12,7 +12,10 @@ class Event:
         self.room = None
         self.track = None
         self.id = id
-        self.guid = guid or str(uuid.uuid4())
+        if guid is None or isinstance(guid, uuid.UUID):
+            self.guid = guid
+        else:
+            self.guid = uuid.UUID(guid)
         self.speakers = []
         self.license = None
         self.can_record = True
