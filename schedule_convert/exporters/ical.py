@@ -27,5 +27,6 @@ class ICalExporter:
             vevent.add('dtstart').value = event.start
             vevent.add('dtend').value = event.start + timedelta(minutes=event.duration)
             vevent.add('description').value = event.abstract or event.description or ''
-            vevent.add('url').value = event.url
+            if event.url:
+                vevent.add('url').value = event.url
         fileobj.write(cal.serialize())
