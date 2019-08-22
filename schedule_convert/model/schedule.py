@@ -1,4 +1,5 @@
 import uuid
+import re
 
 
 UUID_NAMESPACE = uuid.UUID('6ba7b838-9dad-11d1-80b4-00c04fd430c8')
@@ -16,6 +17,12 @@ class Conference:
         self.events = []
         self.timezone = None
         self.needs_data = title is None
+
+    def get_domain(self):
+        if not self.url:
+            return 'conference.com'
+        m = re.search(r'://([^/]+)', self.url)
+        return m.group(1)
 
     def make_guid(self, event):
         if self.slug is None or event.slug is None:
@@ -47,6 +54,8 @@ class Conference:
             self.slug = self.slugify(self.title)
         guids = set()
         for event in self.events:
+            if event.start.tzinfo is None and self.timezone is not None:
+                event.start = event.start.replace(tzinfo=self.timezone)
             self.days.add(event.start.date())
             if event.room:
                 self.rooms.add(event.room)

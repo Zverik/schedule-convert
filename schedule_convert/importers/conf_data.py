@@ -1,4 +1,4 @@
-from ..model import Conference
+from ..model import Conference, SimpleTZ
 
 
 class ConferenceDataImporter:
@@ -19,7 +19,7 @@ class ConferenceDataImporter:
         conf.slug = data['slug']
         conf.url = data['url']
         if 'timezone' in data:
-            conf.timezone = data['timezone']
+            conf.timezone = SimpleTZ(data['timezone'])
         if 'timeslot' in data:
             conf.timeslot = int(data['timeslot'])
         return conf

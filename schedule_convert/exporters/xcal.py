@@ -1,4 +1,3 @@
-import re
 import datetime
 try:
     from lxml import etree
@@ -26,18 +25,15 @@ class XCalExporter:
         etree.SubElement(vc, 'prodid').text = '-//Pentabarf//Schedule//EN'
         etree.SubElement(vc, 'x-wr-caldesc').text = conf.title
         etree.SubElement(vc, 'x-wr-calname').text = conf.title
-        if not conf.url:
-            domain = 'conference.com'
-        else:
-            m = re.search(r'://([^/]+)', conf.url)
-            domain = m.group(1)
+        domain = conf.get_domain()
 
         for event in sorted(conf.events):
             if not event.active or not event.room:
                 continue
             xevent = etree.SubElement(vc, 'vevent')
             etree.SubElement(xevent, 'method').text = 'PUBLISH'
-            etree.SubElement(xevent, 'uid').text = event.slug + '@@' + domain
+            etree.SubElement(xevent, 'uid').text = '{}@{}@{}'.format(
+                conf.slug, event.guid, domain)
 
             etree.SubElement(xevent, PENTABARF_NS + 'event-id').text = str(event.guid)
             etree.SubElement(xevent, PENTABARF_NS + 'event-slug').text = event.slug
@@ -52,7 +48,7 @@ class XCalExporter:
             etree.SubElement(xevent, 'duration').text = str(event.duration / 60.0)
 
             etree.SubElement(xevent, 'summary').text = event.title
-            etree.SubElement(xevent, 'description').text = event.description or ''
+            etree.SubElement(xevent, 'description').text = event.abstract or event.description or ''
             etree.SubElement(xevent, 'class').text = 'PUBLIC'
             etree.SubElement(xevent, 'status').text = 'CONFIRMED'
             etree.SubElement(xevent, 'category').text = 'Talk'

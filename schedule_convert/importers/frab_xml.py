@@ -1,4 +1,4 @@
-from ..model import Conference, Room, Speaker, Event
+from ..model import Conference, Room, Speaker, Event, SimpleTZ
 import re
 from datetime import date, datetime
 try:
@@ -38,7 +38,7 @@ def parse_time_with_day(timestr, day):
 def find_timezone(timestr):
     m = RE_TIMEZONE.search(timestr)
     if m:
-        return m.group(1)
+        return SimpleTZ(m.group(1))
     return None
 
 
@@ -111,5 +111,4 @@ class FrabXmlImporter:
                             speakers[person_id] = Speaker(xperson.text, id=person_id)
                         event.speakers.append(speakers[person_id])
                     conf.events.append(event)
-        conf.prepare()
         return conf

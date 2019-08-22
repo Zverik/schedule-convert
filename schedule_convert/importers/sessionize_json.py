@@ -49,5 +49,4 @@ class SessionizeJsonImporter:
             for sp in xevent['speakers']:
                 event.speakers.append(speakers[sp])
             conf.events.append(event)
-        conf.prepare()
         return conf

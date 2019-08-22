@@ -2,5 +2,8 @@
 *.json
 *.ini
 *.xcal
+*.ics
+*.png
+*.swp
 data/
 __pycache__/

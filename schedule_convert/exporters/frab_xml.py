@@ -15,8 +15,10 @@ def to_minutes(duration):
     return '{:02d}:{:02d}'.format(hours, minutes)
 
 
-def to_timestamp(dt, conf):
-    return dt.strftime(DATE_ISO_FORMAT) + (conf.timezone or '')
+def to_timestamp(date):
+    if date.tzinfo is None:
+        return date.strftime(DATE_ISO_FORMAT)
+    return date.strftime(DATE_ISO_FORMAT) + date.tzinfo.tzname(date)
 
 
 class FrabXmlExporter:
@@ -41,9 +43,9 @@ class FrabXmlExporter:
             xday = etree.SubElement(root, 'day')
             xday.set('index', str(i+1))
             xday.set('date', day.strftime(DATE_FORMAT))
-            xday.set('start', to_timestamp(all_talks[0].start, conf))
-            xday.set('end', to_timestamp(all_talks[-1].start +
-                                         timedelta(minutes=all_talks[-1].duration), conf))
+            xday.set('start', to_timestamp(all_talks[0].start))
+            xday.set('end', to_timestamp(all_talks[-1].start + timedelta(
+                minutes=all_talks[-1].duration)))
             for room in sorted(conf.rooms):
                 xroom = None
                 for talk in conf.filter_events(day=day, room=room):
@@ -53,7 +55,7 @@ class FrabXmlExporter:
                     xtalk = etree.SubElement(xroom, 'event')
                     xtalk.set('guid', str(talk.guid))
                     xtalk.set('id', str(talk.id))
-                    etree.SubElement(xtalk, 'date').text = to_timestamp(talk.start, conf)
+                    etree.SubElement(xtalk, 'date').text = to_timestamp(talk.start)
                     etree.SubElement(xtalk, 'start').text = talk.start.strftime('%H:%M')
                     etree.SubElement(xtalk, 'duration').text = to_minutes(talk.duration)
                     etree.SubElement(xtalk, 'room').text = room.name

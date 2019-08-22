@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 import argparse
+from .model import SimpleTZ
 from .importers import importers
 from .exporters import exporters
 
 
 parser = argparse.ArgumentParser(description='Converts any schedule to a frab-compatible XML')
 parser.add_argument('input', nargs='+', type=argparse.FileType('r'), help='Input file, one or more')
+parser.add_argument('-z', '--tz', help='Override timezone (as +NN/-NN or pNN/mNN)')
 parser.add_argument('-o', '--output', type=argparse.FileType('w'), help='Output file')
 parser.add_argument('-f', '--format', default='xml', help='Output format (default=xml)')
 options = parser.parse_args()
@@ -18,6 +20,9 @@ for i in options.input:
     for imp in importers:
         if imp.check(head):
             conf = imp.parse(i)
+            if options.tz:
+                conf.timezone = SimpleTZ(options.tz)
+            conf.prepare()
     if not conf:
         print('Error: could not determine format for {}'.format(i.name))
     elif schedule is None:
@@ -27,7 +32,6 @@ for i in options.input:
             schedule = conf
     else:
         schedule.merge(conf)
-    schedule.prepare()
 
 if schedule is None:
     print('No schedule to export')
