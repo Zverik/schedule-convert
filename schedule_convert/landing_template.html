@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>{title} Schedule</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        html { margin: 0; }
+        body { font-family: sans-serif; font-size: 16px; background: #ddd; margin: 0; }
+        h1 { text-align: center; }
+        h2 { font-size: 24px; margin-top: 2em; }
+        #content {
+            max-width: 700px;
+            background: #f1f1f1;
+            color: #111;
+            margin: 0 auto;
+            padding: 1em;
+        }
+        img { width: 200px; height: 200px; }
+        .pane.left { float: left; width: 40%; }
+        .twopane, .onepane { margin-top: 2em; }
+        .onepane, .pane {
+            padding: 0 5%;
+            text-align: center;
+            min-width: 200px;
+        }
+    </style>
+</head>
+<body>
+<div id="content">
+    <h1>{title}</h1>
+    <p>See the <a href="{url}">web-based schedule</a> if you don't trust apps and calendars.
+        Otherwise, choose a section for your device.</p>
+
+    <h2>Android Device</h2>
+    <p>On an Android phone, install the <a href="{giggity}">Giggity</a> app (scan the first code),
+        start it and click on a "+" button, then click "Scan QR" and scan the second code.
+        Or copy the <a href="{xml}">XML link</a> if you're reading this on a phone.</p>
+    <div class="twopane">
+        <div class="pane left">
+            <img src="{giggity_qr}" alt="QR code for the Giggity Android app"><br>
+            <a href="{giggity}">Get Giggity on Google Play Store</a>
+        </div>
+        <div class="pane right">
+            <img src="{xml_qr}" alt="QR code for Giggity XML schedule"><br>
+            <a href="{xml}">XML schedule for Giggity</a>
+        </div>
+    </div>
+
+    <h2>iPhone or iPad</h2>
+    <p>On an iOS device, simply start a camera and scan the code below. It will add
+        all conference events to your calendar. Or click on an <a href="{ics}">iCalendar</a>
+        link. You can easily disable and delete the section afterwards.</p>
+    <div class="onepane">
+        <img src="{ics_qr}" alt="QR code for iCalendar schedule"><br>
+        <a href="{ics}">iCalendar schedule</a>
+    </div>
+</div>
+</body>
+</html>
