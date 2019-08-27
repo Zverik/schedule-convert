@@ -40,7 +40,7 @@ def make_landing_page(conf, path, base):
         'giggity': GIGGITY_URL,
         'giggity_qr': base[:base.rindex('/')+1] + 'giggity.' + QR_EXT,
         'title': conf.title,
-        'url': conf.url,
+        'url': conf.url or '#',
     }
     for k, v in var.items():
         template = template.replace('{'+k+'}', v)
