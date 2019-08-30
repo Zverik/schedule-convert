@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 from os import path
 
 here = path.abspath(path.dirname(__file__))
@@ -8,7 +8,8 @@ setup(
     version='1.0',
     author='Ilya Zverev',
     author_email='ilya@zverev.info',
-    packages=['schedule_convert'],
+    packages=find_packages(),
+    python_requires='>=3.5',
     install_requires=[
         'vobject',
         'qrcode[pil]',
