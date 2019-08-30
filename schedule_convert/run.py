@@ -7,7 +7,7 @@ from .exporters import exporters
 from .landing import make_schedule_name, make_landing_page
 
 
-if __name__ == '__main__':
+def main():
     parser = argparse.ArgumentParser(description='Converts any schedule to a frab-compatible XML')
     parser.add_argument('input', nargs='+', type=argparse.FileType('r'),
                         help='Input file, one or more')
