@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 import argparse
 import sys
 from .model import SimpleTZ
@@ -55,3 +54,7 @@ def main():
             make_landing_page(schedule, *options.landing)
         else:
             exporters[options.format].write(options.output, schedule)
+
+
+if __name__ == '__main__':
+    main()
