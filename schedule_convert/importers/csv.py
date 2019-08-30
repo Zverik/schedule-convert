@@ -5,7 +5,7 @@ import re
 
 
 RE_TIME = re.compile(r'^\s*(\d\d?)[:.](\d\d)\s*$')
-RE_DATE = re.compile(r'^\s*(\d{2,4})?-(\d\d?)-(\d\d?)\s*$')
+RE_DATE = re.compile(r'^\s*(?:(\d{2,4})-)?(\d\d?)-(\d\d?)\s*$')
 
 
 class CSVImporter:
@@ -16,6 +16,7 @@ class CSVImporter:
 
     def check(self, head):
         line = head.splitlines()[0]
+        self.delimiter = ','
         titles = line.split(',')
         if 'room' not in titles:
             titles = line.split(';')
@@ -31,11 +32,12 @@ class CSVImporter:
         rooms = {}
         day = None
         room = None
+        track = None
         event = None
         for row in csv.DictReader(fileobj, delimiter=self.delimiter):
             if day is None and not row.get('day'):
                 continue
-            if 'day' in row:
+            if row.get('day'):
                 m = RE_DATE.match(row['day'])
                 if not m:
                     raise ValueError('Wrong date, expecting YYYY-MM-DD: "{}"'.format(row['day']))
@@ -54,7 +56,7 @@ class CSVImporter:
                     room = None
             if room is None and not row.get('room'):
                 continue
-            if 'room' in row:
+            if row.get('room'):
                 new_room = row['room'].strip()
                 if new_room not in rooms:
                     rooms[new_room] = Room(new_room)
@@ -66,23 +68,29 @@ class CSVImporter:
                         event = None
                     room = rooms[new_room]
 
+            if row.get('track'):
+                track = row['track'].strip()
+
             if not row.get('title') or not row.get('start'):
                 continue
             m = RE_TIME.match(row['start'])
             if not m:
                 raise ValueError('Wrong time "{}"'.format(row['start']))
 
-            start = datetime.replace(hour=m[1], minute=m[2])
+            start = day.replace(hour=int(m[1]), minute=int(m[2]))
             if event:
-                duration = (start - event.start).total_seconds() // 60
-                if duration < 3 or duration > 120:
-                    raise ValueError('Duration of event "{}" is inadequate: {}'.format(
-                        event.title, duration))
+                if not event.duration:
+                    duration = (start - event.start).total_seconds() // 60
+                    if duration < 3 or duration > 120:
+                        raise ValueError('Duration of event "{}" is inadequate: {}'.format(
+                            event.title, duration))
+                    event.duration = int(duration)
                 conf.events.append(event)
 
-            event = Event(row['title'].strip())
+            event = Event(row['title'].strip(), id=len(conf.events)+1)
             event.room = room
             event.start = start
+            event.track = track
 
             duration = None
             if row.get('end'):
@@ -96,9 +104,9 @@ class CSVImporter:
                 except ValueError:
                     pass
             if duration and 3 <= duration <= 120:
-                event.duration = duration
+                event.duration = int(duration)
 
-            for k in ('description', 'abstract', 'url', 'track', 'id', 'subtitle', 'language'):
+            for k in ('description', 'abstract', 'url', 'id', 'subtitle', 'language'):
                 v = row.get(k, '').strip()
                 if len(v) > 0:
                     setattr(event, k, v)
@@ -113,7 +121,7 @@ class CSVImporter:
                     speakerstr = [speakerstr.strip()]
                 for sp in speakerstr:
                     if sp not in speakers:
-                        speakers[sp] = Speaker(sp)
+                        speakers[sp] = Speaker(sp, id=len(speakers)+1)
                     event.speakers.append(speakers[sp])
 
         if event:
