@@ -40,12 +40,13 @@ Input Formats
 
 * CSV table. Must have a header with column names. Supported columns are:
 
-  - *day*: format is YYYY-MM-DD or simpler MM-DD. You only need to write it once.
+  - *day*: format is ``YYYY-MM-DD`` or simpler ``MM-DD``. You only need to write it
+    once per day.
   - *room*: again, write it once at the top of the room schedule.
   - *track*: event track. If empty, using the first non-empty value above this row.
   - *title*: required.
-  - *start*: start time, as HH:MM.
-  - *end*: end time, as HH:MM. Optional if this is not the last event in the
+  - *start*: start time, as ``HH:MM``.
+  - *end*: end time, as ``HH:MM``. Optional if this is not the last event in the
     room this day, or if there is a *duration*.
   - *duration*: duration of the event in minutes. Again, use either this column
     or *end*. You need to have one.
@@ -68,7 +69,7 @@ With that, it will generate these files in the ``output`` directory:
 * ``schedule.xml`` with the frab-compatible XML schedule.
 * ``schedule.ics`` with the iCalendar-compatible schedule.
 * ``schedule.xml.png`` and ``schedule.ics.png`` with QR codes for the URLs to
-  the above schedules. It will use the given base path: *https://conf.info/schedule.xml*.
+  the above schedules. It will use the given base path: *\https://conf.info/schedule.xml*.
 * ``giggity.png`` with a QR code for the Giggity app.
 * ``schedule.html`` with the landing page linking to all of these files.
 
