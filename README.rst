@@ -69,7 +69,7 @@ With that, it will generate these files in the ``output`` directory:
 * ``schedule.xml`` with the frab-compatible XML schedule.
 * ``schedule.ics`` with the iCalendar-compatible schedule.
 * ``schedule.xml.png`` and ``schedule.ics.png`` with QR codes for the URLs to
-  the above schedules. It will use the given base path: *\https://conf.info/schedule.xml*.
+  the above schedules. It will use the given base path: ``https://conf.info/schedule.xml``.
 * ``giggity.png`` with a QR code for the Giggity app.
 * ``schedule.html`` with the landing page linking to all of these files.
 
