@@ -31,12 +31,15 @@ Input Formats
 * Sessionize JSON. See `this page`_ to enable it for your conference, or send
   the link to the person who has the rights.
 * Ini-file. Put it first to set the conference's properties. Possible keys are:
+
   - *title* (required)
   - *slug* (required)
   - *url* (required)
   - *timezone*: only simple ``+05`` or ``-11`` are supported.
   - *track*: the default track name for events.
+
 * CSV table. Must have a header with column names. Supported columns are:
+
   - *day*: format is YYYY-MM-DD or simpler MM-DD. You only need to write it once.
   - *room*: again, write it once at the top of the room schedule.
   - *track*: event track. If empty, using the first non-empty value above this row.
