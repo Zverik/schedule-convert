@@ -14,7 +14,7 @@ setup(
         'vobject',
         'qrcode[pil]',
     ],
-    include_package_data=True,
+    package_data={'schedule_convert': ['*.html']},
     url='https://github.com/Zverik/schedule-convert',
     license='MIT License',
     description='Converts and merges conference schedules, frab-compatible',
