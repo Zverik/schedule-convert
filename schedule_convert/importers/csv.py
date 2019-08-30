@@ -41,11 +41,11 @@ class CSVImporter:
                 m = RE_DATE.match(row['day'])
                 if not m:
                     raise ValueError('Wrong date, expecting YYYY-MM-DD: "{}"'.format(row['day']))
-                if m[1]:
-                    year = int(m[1])
+                if m.group(1):
+                    year = int(m.group(1))
                 else:
                     year = datetime.now().year
-                new_day = datetime(year, int(m[2]), int(m[3]))
+                new_day = datetime(year, int(m.group(2)), int(m.group(3)))
                 if new_day != day:
                     if event:
                         if not event.duration:
@@ -77,7 +77,7 @@ class CSVImporter:
             if not m:
                 raise ValueError('Wrong time "{}"'.format(row['start']))
 
-            start = day.replace(hour=int(m[1]), minute=int(m[2]))
+            start = day.replace(hour=int(m.group(1)), minute=int(m.group(2)))
             if event:
                 if not event.duration:
                     duration = (start - event.start).total_seconds() // 60
