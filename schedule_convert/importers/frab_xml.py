@@ -1,5 +1,6 @@
 from ..model import Conference, Room, Speaker, Event, SimpleTZ
 import re
+import logging
 from datetime import date, datetime
 try:
     from lxml import etree
@@ -84,8 +85,9 @@ class FrabXmlImporter:
                         if not conf.timezone:
                             conf.timezone = timezone
                         elif timezone != conf.timezone:
-                            print('Error: timezone {} in {} differs from last timezone {}'.format(
-                                timezone, getttext(xevent, 'date'), conf.timezone))
+                            logging.warning(
+                                'Error: timezone %s in %s differs from last timezone %s',
+                                timezone, getttext(xevent, 'date'), conf.timezone)
                     duration = getttext(xevent, 'duration')
                     if not duration:
                         continue

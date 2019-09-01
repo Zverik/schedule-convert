@@ -79,4 +79,4 @@ with the conference attendees.
 Author and License
 ------------------
 
-Written by Ilya ZVerev, published under MIT license.
+Written by Ilya Zverev, published under MIT license.

@@ -1,5 +1,6 @@
 import argparse
 import sys
+import logging
 from .model import SimpleTZ
 from .importers import importers
 from .exporters import exporters
@@ -20,6 +21,8 @@ def main():
                         'generates schedules')
     options = parser.parse_args()
 
+    logging.basicConfig(level=logging.INFO, format='%(message)s')
+
     schedule = None
     for i in options.input:
         head = i.read(5000)
@@ -32,19 +35,19 @@ def main():
                     conf.timezone = SimpleTZ(options.tz)
                 conf.prepare()
         if conf is None:
-            print('Error: could not determine format for {}'.format(i.name))
+            logging.error('Error: could not determine format for %s', i.name)
         elif schedule is None:
             if conf.needs_data:
-                print('Cannot instantiate the schedule, it needs base data like title')
+                logging.error('Cannot instantiate the schedule, it needs base data like title')
             else:
                 schedule = conf
         else:
             schedule.merge(conf)
 
     if schedule is None:
-        print('No schedule to export')
+        logging.warning('No schedule to export')
     elif schedule.is_empty():
-        print('Schedule is empty')
+        logging.warning('Schedule is empty')
     else:
         if options.landing:
             for fmt in ('xml', 'ical'):

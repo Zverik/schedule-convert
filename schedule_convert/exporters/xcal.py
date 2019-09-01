@@ -56,5 +56,10 @@ class XCalExporter:
             etree.SubElement(xevent, 'location').text = event.room.name
             for sp in event.speakers:
                 etree.SubElement(xevent, 'attendee').text = sp.name
-        result = etree.tostring(root, xml_declaration=True, encoding='utf-8', pretty_print=True)
-        fileobj.write(result.decode('utf-8'))
+        try:
+            result = etree.tostring(root, encoding='unicode', pretty_print=True)
+        except TypeError:
+            # built-in ElementTree doesn't do pretty_print
+            result = etree.tostring(root, encoding='unicode')
+        fileobj.write("<?xml version='1.0' encoding='utf-8'?>\n")
+        fileobj.write(result)

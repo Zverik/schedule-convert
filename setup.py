@@ -13,6 +13,7 @@ setup(
     install_requires=[
         'vobject',
         'qrcode[pil]',
+        'python-slugify',
     ],
     package_data={'schedule_convert': ['*.html']},
     url='https://github.com/Zverik/schedule-convert',
