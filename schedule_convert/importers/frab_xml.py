@@ -10,11 +10,13 @@ except ImportError:
 
 RE_DATE = re.compile(r'(\d{4})-(\d\d)-(\d\d)')
 RE_MINUTE = re.compile(r'^(\d+):(\d+)(?: ([AP]M))?$')
-RE_TIMEZONE = re.compile(r'\d\d:\d\d:\d\d(Z|[+-]\d\d:?\d\d)')
+RE_TIMEZONE = re.compile(r'\d\d:?\d\d(Z|[+-]\d\d:?\d\d)')
 DATE_ISO_FORMAT = '%Y-%m-%dT%H:%M:%S%z'
 
 
 def from_minutes(dur):
+    if dur is None:
+        return None
     if ':' in dur:
         parts = [int(x) for x in dur.split(':')]
         return parts[0] * 60 + parts[1]
@@ -55,7 +57,7 @@ class FrabXmlImporter:
 
     def check(self, head):
         for k in ('conference', 'day', 'title', 'room', 'event',
-                  'timeslot_duration', 'start', 'end'):
+                  'start', 'end'):
             if '<'+k not in head:
                 return False
         return True
@@ -66,7 +68,7 @@ class FrabXmlImporter:
         conf = Conference(getttext(xconf, 'title'))
         conf.timeslot = from_minutes(getttext(xconf, 'timeslot_duration'))
         conf.slug = getttext(xconf, 'acronym')
-        conf.url = getttext(xconf, 'base_url')
+        conf.url = getttext(xconf, 'base_url') or getttext(xconf, 'baseurl')
         speakers = {}
         for xday in root.findall('day'):
             m = RE_DATE.match(xday.get('date'))
