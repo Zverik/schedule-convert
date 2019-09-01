@@ -58,7 +58,7 @@ class Conference:
             self.slug = slugify(self.title)
         guids = set()
         timeslot = None
-        event_ids = set([str(e.id) for e in self.events])
+        event_ids = set()
         next_event_id = 1
         for event in self.events:
             if event.start.tzinfo is None and self.timezone is not None:
@@ -68,7 +68,7 @@ class Conference:
                 while str(next_event_id) in event_ids:
                     next_event_id += 1
                 event.id = next_event_id
-                event_ids.add(str(next_event_id))
+            event_ids.add(str(event.id))
             if event.room:
                 self.rooms.add(event.room)
             self.speakers.update(event.speakers)
@@ -88,14 +88,14 @@ class Conference:
                 else:
                     timeslot = math.gcd(timeslot, event.duration)
         # Deduplicate speaker ids
-        speaker_ids = set(str(speaker.id) for speaker in self.speakers)
+        speaker_ids = set()
         next_speaker_id = 1
         for sp in self.speakers:
             if sp.id is None or str(sp.id) in speaker_ids:
                 while str(next_speaker_id) in speaker_ids:
                     next_speaker_id += 1
                 sp.id = next_speaker_id
-                speaker_ids.add(str(next_speaker_id))
+            speaker_ids.add(str(sp.id))
         if timeslot is not None:
             self.timeslot = timeslot
 
