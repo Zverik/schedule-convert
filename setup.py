@@ -5,7 +5,7 @@ here = path.abspath(path.dirname(__file__))
 
 setup(
     name='schedule-convert',
-    version='1.0',
+    version='1.0.0',
     author='Ilya Zverev',
     author_email='ilya@zverev.info',
     packages=find_packages(),
@@ -21,7 +21,7 @@ setup(
     description='Converts and merges conference schedules, frab-compatible',
     long_description=open(path.join(here, 'README.rst')).read(),
     classifiers=[
-        'Development Status :: 5 - Production/Stable',
+        'Development Status :: 4 - Beta',
         'Environment :: Console',
         'Intended Audience :: Information Technology',
         'Natural Language :: English',
