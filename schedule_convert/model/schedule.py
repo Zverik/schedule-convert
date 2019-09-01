@@ -102,7 +102,14 @@ class Conference:
     def merge(self, other):
         if self.timeslot is None or other.timeslot < self.timeslot:
             self.timeslot = other.timeslot
+        speaker_ids = set([str(sp.id) for sp in self.speakers])
+        next_speaker_id = 1
         for sp in other.speakers:
+            if sp.id is None or str(sp.id) in speaker_ids:
+                while str(next_speaker_id) in speaker_ids:
+                    next_speaker_id += 1
+                sp.id = next_speaker_id
+            speaker_ids.add(str(sp.id))
             self.speakers.add(sp)
         for event in other.events:
             self.events.append(event)
