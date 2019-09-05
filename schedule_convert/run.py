@@ -52,7 +52,8 @@ def main():
         if options.landing:
             for fmt in ('xml', 'ical'):
                 exp = exporters[fmt]
-                with open(make_schedule_name(*options.landing, ext=exp.extension), 'w') as f:
+                with open(make_schedule_name(*options.landing, ext=exp.extension), 'w',
+                          encoding='utf-8') as f:
                     exp.write(f, schedule)
             make_landing_page(schedule, *options.landing)
         else:
