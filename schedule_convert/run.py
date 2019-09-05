@@ -9,10 +9,10 @@ from .landing import make_schedule_name, make_landing_page
 
 def main():
     parser = argparse.ArgumentParser(description='Converts any schedule to a frab-compatible XML')
-    parser.add_argument('input', nargs='+', type=argparse.FileType('r'),
+    parser.add_argument('input', nargs='+', type=argparse.FileType('r', encoding='utf-8'),
                         help='Input file, one or more')
     parser.add_argument('-z', '--tz', help='Override timezone (as +NN/-NN or pNN/mNN)')
-    parser.add_argument('-o', '--output', type=argparse.FileType('w'),
+    parser.add_argument('-o', '--output', type=argparse.FileType('w', encoding='utf-8'),
                         default=sys.stdout, help='Output file')
     parser.add_argument('-f', '--format', default='xml', help='Output format (default=xml)')
     parser.add_argument('-l', '--landing', nargs=2, help='Generate landing page with QR codes; '
