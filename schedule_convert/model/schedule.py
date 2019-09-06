@@ -111,7 +111,10 @@ class Conference:
                 sp.id = next_speaker_id
             speaker_ids.add(str(sp.id))
             self.speakers.add(sp)
+        room_map = {r.name: r for r in self.rooms}
         for event in other.events:
+            if event.room is not None and event.room.name in room_map:
+                event.room = room_map[event.room.name]
             self.events.append(event)
         self.prepare()
 
