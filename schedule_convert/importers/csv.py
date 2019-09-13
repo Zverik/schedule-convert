@@ -54,6 +54,7 @@ class CSVImporter:
                         event = None
                     day = new_day
                     room = None
+                    track = None
             if room is None and not row.get('room'):
                 continue
             if row.get('room'):
@@ -70,6 +71,8 @@ class CSVImporter:
 
             if row.get('track'):
                 track = row['track'].strip()
+                if track == '-':
+                    track = None
 
             if not row.get('title') or not row.get('start'):
                 continue
