@@ -77,7 +77,11 @@ class Conference:
             if event.track is None:
                 event.track = self.default_track
             if event.guid is None:
-                event.guid = self.make_guid(event)
+                new_guid = self.make_guid(event)
+                while new_guid in guids:
+                    event.slug = event.slug + '1'
+                    new_guid = self.make_guid(event)
+                event.guid = new_guid
             if event.guid is not None:
                 if event.guid in guids:
                     raise Exception('Duplicated guid {}'.format(event.guid))
