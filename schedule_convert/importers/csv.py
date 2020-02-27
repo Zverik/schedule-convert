@@ -99,7 +99,7 @@ class CSVImporter:
             if row.get('end'):
                 m2 = RE_TIME.match(row['end'])
                 if m2:
-                    end = day.replace(hour=int(m2[1]), minute=int(m2[2]))
+                    end = day.replace(hour=int(m2.group(1)), minute=int(m2.group(2)))
                     duration = (end - start).total_seconds() // 60
             elif row.get('duration'):
                 try:
