@@ -84,7 +84,7 @@ class CSVImporter:
             if event:
                 if not event.duration:
                     duration = (start - event.start).total_seconds() // 60
-                    if duration < 3 or duration > 240:
+                    if duration < 3 or duration > 500:
                         raise ValueError('Duration of event "{}" is inadequate: {}'.format(
                             event.title, duration))
                     event.duration = int(duration)
