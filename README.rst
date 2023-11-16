@@ -38,7 +38,7 @@ Input Formats
   - *timezone*: only simple ``+05`` or ``-11`` are supported.
   - *track*: the default track name for events.
 
-* CSV table. Must have a header with column names. Supported columns are:
+* CSV table. Must have a header with column names. [Example](https://docs.google.com/spreadsheets/d/1EO3aC3vF9dvb1wopT_cUHaDXqdGIrid_Kj59PZyzR_g/edit?usp=sharing). Supported columns are:
 
   - *day*: format is ``YYYY-MM-DD`` or simpler ``MM-DD``. You only need to write it
     once per day.
