@@ -81,6 +81,7 @@ class FrabXmlImporter:
                     title = getttext(xevent, 'title')
                     event = Event(title, id=xevent.get('id'), guid=xevent.get('guid'))
                     event.room = room
+
                     event.start = parse_time_with_day(getttext(xevent, 'start'), day)
                     if xevent.find('date') is not None:
                         timezone = find_timezone(getttext(xevent, 'date'))
@@ -94,11 +95,16 @@ class FrabXmlImporter:
                     if not duration:
                         continue
                     event.duration = from_minutes(duration)
+
                     event.subtitle = getttext(xevent, 'subtitle')
                     event.slug = getttext(xevent, 'slug')
                     event.url = getttext(xevent, 'url')
                     event.feedback_url = getttext(xevent, 'feedback_url')
-                    event.subtitle = getttext(xevent, 'subtitle')
+                    event.language = getttext(xevent, 'language')
+                    event.track = getttext(xevent, 'track')
+                    event.abstract = getttext(xevent, 'abstract')
+                    event.description = getttext(xevent, 'description')
+
                     rec = xevent.find('recording')
                     if rec is None:
                         event.license = None
@@ -106,10 +112,6 @@ class FrabXmlImporter:
                     else:
                         event.license = getttext(rec, 'license')
                         event.can_record = getttext(rec, 'optout') != 'true'
-                    event.language = getttext(xevent, 'language')
-                    event.track = getttext(xevent, 'track')
-                    event.abstract = getttext(xevent, 'abstract')
-                    event.description = getttext(xevent, 'description')
 
                     persons = xevent.find('persons')
                     if persons is not None:
