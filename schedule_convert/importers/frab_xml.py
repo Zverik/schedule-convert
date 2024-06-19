@@ -97,6 +97,7 @@ class FrabXmlImporter:
                     event.subtitle = getttext(xevent, 'subtitle')
                     event.slug = getttext(xevent, 'slug')
                     event.url = getttext(xevent, 'url')
+                    event.feedback_url = getttext(xevent, 'feedback_url')
                     event.subtitle = getttext(xevent, 'subtitle')
                     rec = xevent.find('recording')
                     if rec is None:
@@ -109,10 +110,13 @@ class FrabXmlImporter:
                     event.track = getttext(xevent, 'track')
                     event.abstract = getttext(xevent, 'abstract')
                     event.description = getttext(xevent, 'description')
-                    for xperson in xevent.find('persons'):
-                        person_id = xperson.get('id')
-                        if person_id not in speakers:
-                            speakers[person_id] = Speaker(xperson.text, id=person_id)
-                        event.speakers.append(speakers[person_id])
+
+                    persons = xevent.find('persons')
+                    if persons is not None:
+                        for xperson in xevent.find('persons'):
+                            person_id = xperson.get('id')
+                            if person_id not in speakers:
+                                speakers[person_id] = Speaker(xperson.text, id=person_id)
+                            event.speakers.append(speakers[person_id])
                     conf.events.append(event)
         return conf

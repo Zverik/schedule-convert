@@ -25,6 +25,7 @@ class Event:
         self.active = True
         self.language = 'en'
         self.url = None
+        self.feedback_url = None
         self.logo = None
         self.slug = None
 

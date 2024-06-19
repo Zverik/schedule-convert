@@ -61,6 +61,8 @@ class FrabXmlExporter:
                     etree.SubElement(xtalk, 'room').text = room.name
                     etree.SubElement(xtalk, 'slug').text = talk.slug
                     etree.SubElement(xtalk, 'url').text = talk.url or ''
+                    if talk.feedback_url:
+                        etree.SubElement(xtalk, 'feedback_url').text = talk.feedback_url
                     rec = etree.SubElement(xtalk, 'recording')
                     etree.SubElement(rec, 'license').text = ''
                     etree.SubElement(rec, 'optout').text = 'false' if talk.can_record else 'true'
