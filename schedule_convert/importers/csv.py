@@ -17,9 +17,9 @@ class CSVImporter:
     def check(self, head):
         line = head.splitlines()[0]
         self.delimiter = ','
-        titles = line.split(',')
+        titles = [c.replace('"', '') for c in line.split(',')]
         if 'room' not in titles:
-            titles = line.split(';')
+            titles = [c.replace('"', '') for c in line.split(';')]
             self.delimiter = ';'
         for k in ('day', 'room', 'start', 'title'):
             if k not in titles:
@@ -106,7 +106,7 @@ class CSVImporter:
                     duration = round(float(row['duration'].strip()))
                 except ValueError:
                     pass
-            if duration and 3 <= duration <= 120:
+            if duration and 3 <= duration <= 180:
                 event.duration = int(duration)
 
             for k in ('description', 'abstract', 'url', 'id', 'subtitle', 'language'):
