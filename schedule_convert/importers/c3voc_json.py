@@ -1,6 +1,12 @@
-from ..model import Conference, Room, Speaker, Event
-from datetime import datetime
+from ..model import Conference, Room, Speaker, Event, SimpleTZ
+from datetime import date, datetime
 import json
+import re
+
+
+RE_DATE = re.compile(r'(\d{4})-(\d\d)-(\d\d)')
+RE_MINUTE = re.compile(r'^(\d+):(\d+)(?: ([AP]M))?$')
+RE_TIMEZONE = re.compile(r'\d\d:?\d\d(Z|[+-]\d\d:?\d\d)')
 
 
 class C3VocJsonImporter:
@@ -17,11 +23,33 @@ class C3VocJsonImporter:
             return parts[0] * 60 + parts[1]
         return round(float(dur))
 
-    def parse_talk(self, xevent, room):
-        event = Event(xevent['title'], id=xevent.get('id'), guid=xevent.get('guid'))
+    def parse_time_with_day(self, timestr, day):
+        m = RE_MINUTE.match(timestr)
+        if m:
+            hour = int(m.group(1))
+            if m.group(3) == 'PM' and hour < 12:
+                hour += 12
+            elif m.group(3) == 'AM' and hour == 12:
+                hour = 0
+            return datetime(day.year, day.month, day.day,
+                            hour, int(m.group(2)))
+        if 'T' in timestr:
+            return datetime.fromisoformat(timestr)
+        raise ValueError('Unknown format: {}'.format(timestr))
+
+    def find_timezone(self, timestr):
+        m = RE_TIMEZONE.search(timestr)
+        if m:
+            return SimpleTZ(m.group(1))
+        return None
+
+    def parse_talk(self, xevent, day, room):
+        event = Event(xevent['title'], id=xevent.get('id'),
+                      guid=xevent.get('guid'))
         event.room = room
 
-        event.start = datetime.fromisoformat(xevent['date'])
+        event.start = self.parse_time_with_day(xevent['start'], day)
+        # event.start = datetime.fromisoformat(xevent['date'])
         duration = xevent.get('duration')
         if not duration:
             return None
@@ -54,12 +82,15 @@ class C3VocJsonImporter:
         conf.slug = data.get('acronym')
         conf.timeslot = self.from_minutes(data.get('timeslot_duration'))
 
-        for day in data['days']:
-            for room_name, talks in day['rooms'].items():
+        for xday in data['days']:
+            m = RE_DATE.match(xday.get('date'))
+            day = date(int(m.group(1)), int(m.group(2)), int(m.group(3)))
+            conf.days.add(day)
+            for room_name, talks in xday['rooms'].items():
                 room = Room(room_name)
                 conf.rooms.add(room)
                 for talk in talks:
-                    event = self.parse_talk(talk, room)
+                    event = self.parse_talk(talk, day, room)
                     if event:
                         conf.events.append(event)
 
