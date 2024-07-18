@@ -31,6 +31,7 @@ def make_qr(url):
 
 def make_landing_page(conf, path, base):
     GIGGITY_URL = 'https://play.google.com/store/apps/details?id=net.gaast.giggity'
+    GIGGITYF_URL = 'https://f-droid.org/packages/net.gaast.giggity/'
     template = open(os.path.join(os.path.dirname(__file__), 'landing_template.html'), 'r').read()
     var = {
         'xml': base + '.xml',
@@ -40,6 +41,8 @@ def make_landing_page(conf, path, base):
         'ics_qr': base + '.ics.' + QR_EXT,
         'giggity': GIGGITY_URL,
         'giggity_qr': base[:base.rindex('/')+1] + 'giggity.' + QR_EXT,
+        'giggityf': GIGGITYF_URL,
+        'giggityf_qr': base[:base.rindex('/')+1] + 'giggityf.' + QR_EXT,
         'title': conf.title,
         'url': conf.url or '#',
     }
@@ -53,3 +56,5 @@ def make_landing_page(conf, path, base):
         make_qr(base + '.ics').save(f)
     with open(os.path.join(path, 'giggity.' + QR_EXT), 'wb') as f:
         make_qr(GIGGITY_URL).save(f)
+    with open(os.path.join(path, 'giggityf.' + QR_EXT), 'wb') as f:
+        make_qr(GIGGITYF_URL).save(f)
