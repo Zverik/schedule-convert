@@ -35,6 +35,7 @@ def make_landing_page(conf, path, base):
     var = {
         'xml': base + '.xml',
         'ics': base + '.ics',
+        'xml_short': base.replace('https://', '') + '.xml',
         'xml_qr': base + '.xml.' + QR_EXT,
         'ics_qr': base + '.ics.' + QR_EXT,
         'giggity': GIGGITY_URL,
