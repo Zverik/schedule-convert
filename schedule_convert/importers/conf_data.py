@@ -1,4 +1,5 @@
 from ..model import Conference, SimpleTZ
+from io import TextIOWrapper
 
 
 class ConferenceDataImporter:
@@ -11,7 +12,7 @@ class ConferenceDataImporter:
 
     def parse(self, fileobj):
         data = {}
-        for line in fileobj:
+        for line in TextIOWrapper(fileobj, 'utf-8'):
             kv = line.split('=')
             if len(kv) == 2:
                 data[kv[0].strip()] = kv[1].strip()

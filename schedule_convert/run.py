@@ -9,7 +9,7 @@ from .landing import make_schedule_name, make_landing_page
 
 def main():
     parser = argparse.ArgumentParser(description='Converts any schedule to a frab-compatible XML')
-    parser.add_argument('input', nargs='+', type=argparse.FileType('r', encoding='utf-8'),
+    parser.add_argument('input', nargs='+', type=argparse.FileType('rb'),
                         help='Input file, one or more')
     parser.add_argument('-z', '--tz', help='Override timezone (as +NN/-NN or pNN/mNN)')
     parser.add_argument('-o', '--output', type=argparse.FileType('w', encoding='utf-8'),
@@ -27,6 +27,10 @@ def main():
     for i in options.input:
         head = i.read(5000)
         i.seek(0)
+        try:
+            head = head.decode()
+        except UnicodeDecodeError:
+            head = head.decode('latin-1')
         conf = None
         for imp in importers:
             if imp.check(head):

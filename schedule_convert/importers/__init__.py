@@ -4,6 +4,7 @@ from .conf_data import ConferenceDataImporter
 from .pretalx_json import PretalxJsonImporter
 from .c3voc_json import C3VocJsonImporter
 from .csv import CSVImporter
+from .agile_xlsx import AgileXlsImporter
 
 importers = [
     FrabXmlImporter(),
@@ -12,4 +13,5 @@ importers = [
     PretalxJsonImporter(),
     ConferenceDataImporter(),
     CSVImporter(),
+    AgileXlsImporter(),
 ]
