@@ -107,7 +107,7 @@ class CSVImporter:
                     duration = round(float(row['duration'].strip()))
                 except ValueError:
                     pass
-            if duration and 3 <= duration <= 180:
+            if duration and 3 <= duration <= 240:
                 event.duration = int(duration)
 
             for k in ('description', 'abstract', 'url', 'id', 'subtitle', 'language'):

@@ -5,7 +5,7 @@ here = path.abspath(path.dirname(__file__))
 
 setup(
     name='schedule-convert',
-    version='1.0.1',
+    version='1.1.0',
     author='Ilya Zverev',
     author_email='ilya@zverev.info',
     packages=find_packages(),
